@@ -1,0 +1,129 @@
+p {
+    font-family: "Google Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings: "GRAD" 0;
+    font-size: 200%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+h1 {
+    font-family: "Google Sans", sans-serif;
+    font-weight: bold;
+    font-size: 1000%;
+    background-color: forestgreen;
+    color: white;
+}
+
+.header {;
+    text-align: center;
+    align-items: center;
+    font-size: 500%;
+    margin: 0;
+    padding: 0;
+}
+
+.forest-background {
+    background-image: url('waterfall-forest-background.jpg');
+}
+
+nav ul {
+    list-style-type: none; /* Removes bullet points */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Contains the floated list items */
+    background-color: #333333; /* Adds a background color */
+}
+
+/* Style the list items (li) to be side-by-side */
+nav li {
+    float: left; /* Aligns items horizontally */
+}
+
+/* Style the links (a) */
+nav li a {
+    display: block; /* Makes the entire area clickable */
+    color: white; /* Text color */
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none; /* Removes underlines */
+}
+
+nav li a p {
+    font-family: "Google Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings: "GRAD" 0;
+    font-size: 300%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Change the background color on hover */
+nav li a:hover {
+    background-color: #dddddd;
+    color: #333333;
+}
+
+/* Add an active class to highlight the current page */
+nav li a.active {
+    background-color: #04AA6D;
+}
+
+button {
+    display: block;
+    margin: auto;
+    height: 1000%;
+    width: 50%;
+}
+
+button a {
+    text-decoration: none;
+    color: black;
+}
+
+button a p {
+    font-family: "Google Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings: "GRAD" 0;
+    font-size: 350%;
+    margin: 0;
+    padding: 0;
+}
+
+
+center {
+    justify-self: center;
+}
+
+.space {
+    margin-top: 5%;
+}
+
+.button-link {
+    padding: 10px 20px;
+    background-color: #04AA6D;
+    color: white;
+    text-decoration: none;
+    font-family: "Google Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings: "GRAD" 0;
+    font-size: 200%;
+    margin: 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.button-link:hover {
+    background-color: forestgreen;
+}
