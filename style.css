@@ -10,6 +10,18 @@ p {
     text-align: center;
 }
 
+form {
+    font-family: "Google Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings: "GRAD" 0;
+    font-size: 200%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
 h1 {
     font-family: "Google Sans", sans-serif;
     font-weight: bold;
