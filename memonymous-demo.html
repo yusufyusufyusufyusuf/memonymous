@@ -105,6 +105,10 @@
       <button class="button-link" id="gateBtn">Unlock</button>
     </form>
   </section>
+  <section id="reader" class="view">
+    <div id="readerContent"></div>
+    <button class="button-link grey" data-view="read" style="margin-top:4%;">&larr; Back to all memoirs</button>
+  </section>
   <section id="about" class="view">
     <p class="space welcome">Memonymous was created by a group of Grade 8 students who believe that anybody should be able to share their own story for free and anonymously. We understand that this may not be easily possible, but the action that we determined can most easily provide this to the greatest amount of people is to publish this website online.</p>
   </section>
@@ -171,17 +175,23 @@ async function removeMemoir(mid){
   state = data; cache(); render(); toast("Removed");
 }
 
-async function readMemoir(mid){
+async function openMemoir(mid){
   const data = await loadRemote();
-  const m = data.memoirs.find(function(x){ return x.id===mid; }); if(!m) return;
+  const m = data.memoirs.find(function(x){ return x.id===mid; });
+  if(!m || m.status!=="approved"){ toast("That memoir is no longer available"); show("read"); return; }
   m.views = (m.views||0) + 1; data.metrics.views = (data.metrics.views||0) + 1;
-  await saveRemote(data); state = data; cache(); render();
+  await saveRemote(data); state = data; cache();
+  document.querySelector("#readerContent").innerHTML =
+    '<p class="heading">'+esc(m.title)+'</p>' +
+    '<div class="card"><div class="meta">Published '+fmt(m.publishedAt)+' &middot; '+(m.views||0)+' views</div><div class="body">'+esc(m.body)+'</div></div>';
+  render();
+  show("reader");
 }
 
 function render(){
   const approved = state.memoirs.filter(function(m){ return m.status==="approved"; }).sort(function(a,b){ return b.publishedAt-a.publishedAt; });
 
-  $("#feed").innerHTML = approved.length ? approved.map(function(m){ return '<div class="card"><h3>'+esc(m.title)+'</h3><div class="meta">Published '+fmt(m.publishedAt)+' &middot; '+(m.views||0)+' view'+((m.views||0)===1?'':'s')+'</div><div class="body">'+esc(m.body)+'</div><div class="row"><button class="button-link grey small" onclick="readMemoir(\''+m.id+'\')">Count a read +1</button></div></div>'; }).join("") : '<div class="empty">No memoirs published yet. Be the first - tap Submit a Memoir.</div>';
+  $("#feed").innerHTML = approved.length ? approved.map(function(m){ var preview = m.body.length>180 ? m.body.slice(0,180)+"..." : m.body; return '<div class="card" style="cursor:pointer;" onclick="openMemoir(\''+m.id+'\')"><h3>'+esc(m.title)+'</h3><div class="meta">Published '+fmt(m.publishedAt)+' &middot; '+(m.views||0)+' view'+((m.views||0)===1?'':'s')+'</div><div class="body">'+esc(preview)+'</div><div class="row"><span style="color:#04AA6D; font-size:120%;">Click to read &rarr;</span></div></div>'; }).join("") : '<div class="empty">No memoirs published yet. Be the first - tap Submit a Memoir.</div>';
 
   $("#modPublished").innerHTML = approved.length ? approved.map(function(m){ return '<div class="card"><h3>'+esc(m.title)+' <span class="badge">'+(m.views||0)+' views</span></h3><div class="row"><button class="button-link red small" onclick="removeMemoir(\''+m.id+'\')">Remove</button></div></div>'; }).join("") : '<div class="empty">Nothing published yet.</div>';
 
