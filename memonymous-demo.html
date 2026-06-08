@@ -215,7 +215,7 @@ function show(v){
   document.querySelectorAll(".view").forEach(function(el){ el.classList.toggle("active", el.id===v); });
   document.querySelectorAll("nav a").forEach(function(a){ a.classList.toggle("active", a.dataset.view===v); });
   window.scrollTo(0,0);
-  if(v==="read" || v==="mod" || v==="stats"){ refresh(); }
+  if(v==="read"){ refresh(); }
 }
 async function tryUnlock(){
   var gp = document.querySelector("#gatePass");
