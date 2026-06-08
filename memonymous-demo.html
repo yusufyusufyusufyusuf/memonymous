@@ -146,7 +146,19 @@ async function saveRemote(data){
     return r.ok;
   } catch (e) { return false; }
 }
-async function refresh(){ state = await loadRemote(); cache(); render(); }
+async function refresh(){
+  const remote = await loadRemote();
+  // Merge: keep everything from the server, plus any local posts not yet on the server.
+  const byId = {};
+  (remote.memoirs||[]).forEach(function(m){ byId[m.id] = m; });
+  (state.memoirs||[]).forEach(function(m){ if(!byId[m.id]) byId[m.id] = m; });
+  const merged = Object.keys(byId).map(function(k){ return byId[k]; });
+  const remoteHasData = (remote.metrics && (remote.metrics.submissions||remote.metrics.views));
+  state = { memoirs: merged, metrics: remoteHasData ? remote.metrics : (state.metrics || { submissions:0, views:0, removed:0 }) };
+  cache(); render();
+  // If we have local posts the server is missing, try to push the merged set back.
+  if(merged.length > (remote.memoirs||[]).length){ saveRemote(state); }
+}
 
 async function submitMemoir(){
   const title = $("#title").value.trim();
