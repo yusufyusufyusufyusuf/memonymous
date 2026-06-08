@@ -96,6 +96,15 @@
     <p class="subtext">Activity across the site.</p>
     <div class="stats" id="statGrid"></div>
   </section>
+  <section id="gate" class="view">
+    <p class="heading">Private Area</p>
+    <p class="subtext">Enter the password to continue.</p>
+    <form onsubmit="return false;">
+      <label for="gatePass"><p>Password</p></label>
+      <input type="text" id="gatePass" placeholder="Password" autocomplete="off">
+      <button class="button-link" id="gateBtn">Unlock</button>
+    </form>
+  </section>
   <section id="about" class="view">
     <p class="space welcome">Memonymous was created by a group of Grade 8 students who believe that anybody should be able to share their own story for free and anonymously. We understand that this may not be easily possible, but the action that we determined can most easily provide this to the greatest amount of people is to publish this website online.</p>
   </section>
@@ -183,20 +192,30 @@ function render(){
 var PROTECTED = ["mod","stats"];
 var PASSWORD = "1234";
 var unlocked = false;
+var pendingView = null;
 function show(v){
   if(PROTECTED.indexOf(v) !== -1 && !unlocked){
-    var entry = prompt("This area is private. Enter password:");
-    if(entry === null) return;
-    if(entry !== PASSWORD){ toast("Incorrect password"); return; }
-    unlocked = true;
+    pendingView = v;
+    document.querySelectorAll(".view").forEach(function(el){ el.classList.toggle("active", el.id==="gate"); });
+    document.querySelectorAll("nav a").forEach(function(a){ a.classList.toggle("active", a.dataset.view===v); });
+    var gp = document.querySelector("#gatePass"); if(gp){ gp.value=""; gp.focus(); }
+    window.scrollTo(0,0);
+    return;
   }
   document.querySelectorAll(".view").forEach(function(el){ el.classList.toggle("active", el.id===v); });
   document.querySelectorAll("nav a").forEach(function(a){ a.classList.toggle("active", a.dataset.view===v); });
   window.scrollTo(0,0);
   if(v==="read" || v==="mod" || v==="stats"){ refresh(); }
 }
+function tryUnlock(){
+  var gp = document.querySelector("#gatePass");
+  if(gp && gp.value === PASSWORD){ unlocked = true; show(pendingView || "mod"); }
+  else { toast("Incorrect password"); }
+}
 document.querySelectorAll("[data-view]").forEach(function(el){ el.addEventListener("click", function(){ show(el.dataset.view); }); });
 $("#submitBtn").addEventListener("click", submitMemoir);
+document.querySelector("#gateBtn").addEventListener("click", tryUnlock);
+document.querySelector("#gatePass").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); tryUnlock(); } });
 render();
 refresh();
 </script>
