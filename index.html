@@ -180,7 +180,16 @@ function render(){
   $("#statGrid").innerHTML = grid.map(function(p){ return '<div class="stat"><div class="n">'+p[1]+'</div><div class="l">'+p[0]+'</div></div>'; }).join("");
 }
 
+var PROTECTED = ["mod","stats"];
+var PASSWORD = "1234";
+var unlocked = false;
 function show(v){
+  if(PROTECTED.indexOf(v) !== -1 && !unlocked){
+    var entry = prompt("This area is private. Enter password:");
+    if(entry === null) return;
+    if(entry !== PASSWORD){ toast("Incorrect password"); return; }
+    unlocked = true;
+  }
   document.querySelectorAll(".view").forEach(function(el){ el.classList.toggle("active", el.id===v); });
   document.querySelectorAll("nav a").forEach(function(a){ a.classList.toggle("active", a.dataset.view===v); });
   window.scrollTo(0,0);
