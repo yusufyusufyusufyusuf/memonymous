@@ -241,14 +241,14 @@ function render(){
   });
 }
 
+const PROTECTED = ["mod","stats"];   // moderation + analytics are private
+const PASSWORD = "1234";
+let unlocked = false;
 function show(v){
-  document.querySelectorAll(".view").forEach(el=>el.classList.toggle("active", el.id===v));
-  document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("active", a.dataset.view===v));
-  window.scrollTo(0,0);
-}
-document.querySelectorAll("[data-view]").forEach(el=>el.addEventListener("click", ()=>show(el.dataset.view)));
-$("#submitBtn").addEventListener("click", submitMemoir);
-render();
-</script>
-</body>
-</html>
+  if(PROTECTED.includes(v) && !unlocked){
+    const entry = prompt("This area is private. Enter password:");
+    if(entry === null) return;                 // cancelled
+    if(entry !== PASSWORD){ toast("Incorrect password"); return; }
+    unlocked = true;
+  }
+  document.querySelectorAll(".view").f
