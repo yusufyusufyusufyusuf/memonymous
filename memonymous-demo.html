@@ -155,7 +155,7 @@ function render(){
   document.querySelectorAll('nav a[data-view="mod"] p').forEach(function(p){ p.innerHTML = pending.length ? 'Moderation <span class="badge">'+pending.length+'</span>' : "Moderation"; });
 }
 
-const PROTECTED = ["mod","stats"];
+const PROTECTED = [];
 const PASSWORD = "1234";
 let unlocked = false;
 function show(v){
