@@ -159,20 +159,19 @@ async function submitMemoir(){
   if(data.memoirs.some(function(m){ return m.contentHash===hash && m.status==="approved"; })){ toast("That memoir is already published"); return; }
   data.memoirs.push({ id:rid(), title:title, body:body, contentHash:hash, status:"approved", createdAt:Date.now(), publishedAt:Date.now(), views:0 });
   data.metrics.submissions = (data.metrics.submissions||0) + 1;
-  const ok = await saveRemote(data);
-  if(!ok){ toast("Network problem - please try again"); return; }
   state = data; cache();
+  const ok = await saveRemote(data);
   $("#title").value=""; $("#body").value="";
-  toast("Published for everyone!"); render(); show("read");
+  toast(ok ? "Published for everyone!" : "Published (offline - will share when back online)");
+  render(); show("read");
 }
 
 async function removeMemoir(mid){
   const data = await loadRemote();
   const m = data.memoirs.find(function(x){ return x.id===mid; }); if(!m) return;
   m.status = "removed"; data.metrics.removed = (data.metrics.removed||0) + 1;
-  const ok = await saveRemote(data);
-  if(!ok){ toast("Network problem - please try again"); return; }
-  state = data; cache(); render(); toast("Removed");
+  state = data; cache(); render();
+  await saveRemote(data); toast("Removed");
 }
 
 async function openMemoir(mid){
