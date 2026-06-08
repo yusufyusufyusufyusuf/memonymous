@@ -190,7 +190,8 @@ function render(){
 }
 
 var PROTECTED = ["mod","stats"];
-var PASSWORD = "1234";
+var PASS_SALT = "2f656f325d617cc3c2367d3b113cf4ec";
+var PASS_HASH = "f9a1b5bd7269e25947a1194ea0ca432d7f8038b495ac2233e3ad6ba3c0a2d85e";
 var unlocked = false;
 var pendingView = null;
 function show(v){
@@ -207,9 +208,11 @@ function show(v){
   window.scrollTo(0,0);
   if(v==="read" || v==="mod" || v==="stats"){ refresh(); }
 }
-function tryUnlock(){
+async function tryUnlock(){
   var gp = document.querySelector("#gatePass");
-  if(gp && gp.value === PASSWORD){ unlocked = true; show(pendingView || "mod"); }
+  if(!gp) return;
+  var hashed = await sha256(PASS_SALT + gp.value);
+  if(hashed === PASS_HASH){ unlocked = true; show(pendingView || "mod"); }
   else { toast("Incorrect password"); }
 }
 document.querySelectorAll("[data-view]").forEach(function(el){ el.addEventListener("click", function(){ show(el.dataset.view); }); });
